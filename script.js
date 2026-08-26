@@ -1,0 +1,1 @@
+const menu=document.getElementById('menu'),nav=document.getElementById('nav');menu.onclick=()=>nav.classList.toggle('open');document.getElementById('form').onsubmit=e=>{e.preventDefault();document.getElementById('msg').textContent='Thank you! Form backend can be connected in the next step.';e.target.reset()};
