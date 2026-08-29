@@ -353,10 +353,10 @@
     </div>
 
 
-    <!-- EMAIL CONTACT FORM -->
+    <!-- CONTACT FORM -->
     <form
       id="form"
-      action="https://formsubmit.co/muqaddash52@gmail.com"
+      action="https://formsubmit.co/ajax/muqaddash52@gmail.com"
       method="POST"
     >
 
@@ -365,6 +365,7 @@
         type="text"
         name="name"
         placeholder="Your Name"
+        autocomplete="name"
       >
 
       <input
@@ -372,6 +373,7 @@
         type="email"
         name="email"
         placeholder="Your Email"
+        autocomplete="email"
       >
 
       <textarea
@@ -381,7 +383,7 @@
       ></textarea>
 
 
-      <!-- EMAIL SETTINGS -->
+      <!-- FORM SUBMIT SETTINGS -->
 
       <input
         type="hidden"
@@ -395,18 +397,33 @@
         value="table"
       >
 
+      <!-- AJAX form: no CAPTCHA page -->
       <input
         type="hidden"
         name="_captcha"
-        value="true"
+        value="false"
+      >
+
+      <!-- Identify the website -->
+      <input
+        type="hidden"
+        name="_url"
+        value="https://logicsparklab.github.io/Logic-Spark-Lab-Website/"
       >
 
 
-      <button class="btn" type="submit">
+      <button
+        class="btn"
+        type="submit"
+      >
         Send Message →
       </button>
 
-      <p id="msg"></p>
+      <p
+        id="msg"
+        role="status"
+        aria-live="polite"
+      ></p>
 
     </form>
 
