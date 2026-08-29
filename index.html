@@ -42,7 +42,6 @@
   <!-- HERO SECTION -->
   <section id="home" class="hero">
 
-    <!-- LEFT CONTENT -->
     <div class="hero-content">
 
       <p class="eyebrow">
@@ -118,6 +117,7 @@
         playsinline
         preload="metadata"
       >
+
         <source
           src="Logicsparklab_Intro_GitHub.mp4"
           type="video/mp4"
@@ -353,23 +353,54 @@
     </div>
 
 
-    <form id="form">
+    <!-- EMAIL CONTACT FORM -->
+    <form
+      id="form"
+      action="https://formsubmit.co/muqaddash52@gmail.com"
+      method="POST"
+    >
 
       <input
         required
+        type="text"
+        name="name"
         placeholder="Your Name"
       >
 
       <input
         required
         type="email"
+        name="email"
         placeholder="Your Email"
       >
 
       <textarea
         required
+        name="message"
         placeholder="Tell us about your project"
       ></textarea>
+
+
+      <!-- EMAIL SETTINGS -->
+
+      <input
+        type="hidden"
+        name="_subject"
+        value="New Contact Message - Logic Spark Lab"
+      >
+
+      <input
+        type="hidden"
+        name="_template"
+        value="table"
+      >
+
+      <input
+        type="hidden"
+        name="_captcha"
+        value="true"
+      >
+
 
       <button class="btn" type="submit">
         Send Message →
