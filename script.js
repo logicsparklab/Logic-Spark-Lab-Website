@@ -1,255 +1,116 @@
-/* =========================
-   MOBILE MENU
-========================= */
-
 const menu = document.getElementById('menu');
 const nav = document.getElementById('nav');
 
 if (menu && nav) {
-
-  menu.addEventListener('click', () => {
-    nav.classList.toggle('open');
-  });
-
+  menu.onclick = () => nav.classList.toggle('open');
 }
 
-
-/* =========================
-   CONTACT FORM
-   FORMSUBMIT AJAX
-========================= */
-
+/* CONTACT FORM */
 const form = document.getElementById('form');
 const msg = document.getElementById('msg');
 
-if (form && msg) {
-
+if (form) {
   form.addEventListener('submit', async (e) => {
-
-    // IMPORTANT:
-    // Prevent normal browser submission / redirect
     e.preventDefault();
-    e.stopPropagation();
 
-    const submitButton =
-      form.querySelector('button[type="submit"]');
-
-    if (!submitButton) {
-      return;
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
     }
-
-
-    /* -------------------------
-       START SENDING
-    ------------------------- */
-
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
-
-    msg.textContent = '';
-    msg.style.color = '#75d78e';
-
+    if (msg) msg.textContent = '';
 
     try {
-
-      /*
-       * FormSubmit AJAX endpoint.
-       *
-       * This keeps the visitor on our website.
-       */
-
-      const response = await fetch(
-        'https://formsubmit.co/ajax/muqaddash52@gmail.com',
-        {
-          method: 'POST',
-
-          headers: {
-            'Accept': 'application/json'
-          },
-
-          body: new FormData(form)
-        }
-      );
-
-
-      /*
-       * Read FormSubmit JSON response
-       */
+      const response = await fetch('https://formsubmit.co/ajax/muqaddash52@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
 
       const data = await response.json();
 
-
-      console.log('FormSubmit response:', data);
-
-
-      /* -------------------------
-         SUCCESS
-      ------------------------- */
-
-      if (
-        response.ok &&
-        data.success !== false
-      ) {
-
+      if (response.ok && data.success !== false) {
         form.reset();
-
-        msg.textContent =
-          '✓ Message Sent Successfully!';
-
-        msg.style.color = '#75d78e';
-
+        if (msg) {
+          msg.textContent = '✓ Message Sent Successfully!';
+          msg.style.color = '#75d78e';
+        }
+      } else {
+        throw new Error('Submission failed');
       }
-
-
-      /* -------------------------
-         ERROR
-      ------------------------- */
-
-      else {
-
-        throw new Error(
-          data.message || 'Form submission failed'
-        );
-
+    } catch (error) {
+      if (msg) {
+        msg.textContent = 'Unable to send message. Please try again.';
+        msg.style.color = '#ff7b7b';
       }
-
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message →';
+      }
     }
-
-
-    /* -------------------------
-       NETWORK / SERVER ERROR
-    ------------------------- */
-
-    catch (error) {
-
-      console.error(
-        'Contact form error:',
-        error
-      );
-
-      msg.textContent =
-        'Unable to send message. Please try again.';
-
-      msg.style.color = '#ff7b7b';
-
-    }
-
-
-    /* -------------------------
-       RESTORE BUTTON
-    ------------------------- */
-
-    finally {
-
-      submitButton.disabled = false;
-
-      submitButton.textContent =
-        'Send Message →';
-
-    }
-
   });
-
 }
 
+/* LOGO POPUP */
+const logoImg = document.getElementById('logoImg');
+const logoModal = document.getElementById('logoModal');
+const logoClose = document.getElementById('logoClose');
 
-/* =========================
-   LOGO POPUP
-========================= */
-
-const logoImg =
-  document.getElementById('logoImg');
-
-const logoModal =
-  document.getElementById('logoModal');
-
-const logoClose =
-  document.getElementById('logoClose');
-
-
-/* OPEN LOGO */
-
-if (logoImg && logoModal) {
-
-  logoImg.addEventListener('click', () => {
-
-    logoModal.classList.add('show');
-
-  });
-
-}
-
-
-/* CLOSE LOGO */
-
-if (logoClose && logoModal) {
-
-  logoClose.addEventListener('click', () => {
-
-    logoModal.classList.remove('show');
-
-  });
-
-}
-
-
-/* CLOSE WHEN CLICKING OUTSIDE */
-
+if (logoImg && logoModal) logoImg.onclick = () => logoModal.classList.add('show');
+if (logoClose && logoModal) logoClose.onclick = () => logoModal.classList.remove('show');
 if (logoModal) {
-
-  logoModal.addEventListener('click', (e) => {
-
-    if (e.target === logoModal) {
-
-      logoModal.classList.remove('show');
-
-    }
-
-  });
-
+  logoModal.onclick = (e) => {
+    if (e.target === logoModal) logoModal.classList.remove('show');
+  };
 }
 
+/* PROJECT IMAGE POPUP */
+const projectModal = document.getElementById('projectModal');
+const projectModalImage = document.getElementById('projectModalImage');
+const projectModalTitle = document.getElementById('projectModalTitle');
+const projectClose = document.getElementById('projectClose');
 
-/* =========================
-   CLOSE LOGO WITH ESC
-========================= */
+function openProjectModal(image, title) {
+  if (!projectModal || !projectModalImage) return;
+  projectModalImage.src = image;
+  projectModalImage.alt = title + ' project preview';
+  if (projectModalTitle) projectModalTitle.textContent = title;
+  projectModal.classList.add('show');
+  projectModal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
 
-document.addEventListener('keydown', (e) => {
+function closeProjectModal() {
+  if (!projectModal) return;
+  projectModal.classList.remove('show');
+  projectModal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
 
-  if (
-    e.key === 'Escape' &&
-    logoModal &&
-    logoModal.classList.contains('show')
-  ) {
-
-    logoModal.classList.remove('show');
-
-  }
-
+document.querySelectorAll('[data-project-image]').forEach((button) => {
+  button.addEventListener('click', () => {
+    openProjectModal(button.dataset.projectImage, button.dataset.projectTitle || 'Project');
+  });
 });
 
-
-/* =========================
-   CLOSE MOBILE MENU
-   AFTER NAVIGATION
-========================= */
-
-if (nav) {
-
-  document
-    .querySelectorAll('#nav a')
-    .forEach((link) => {
-
-      link.addEventListener('click', () => {
-
-        if (nav.classList.contains('open')) {
-
-          nav.classList.remove('open');
-
-        }
-
-      });
-
-    });
-
+if (projectClose) projectClose.addEventListener('click', closeProjectModal);
+if (projectModal) {
+  projectModal.addEventListener('click', (e) => {
+    if (e.target === projectModal) closeProjectModal();
+  });
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeProjectModal();
+    if (logoModal) logoModal.classList.remove('show');
+  }
+});
+
+/* CLOSE MOBILE MENU */
+document.querySelectorAll('#nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (nav && nav.classList.contains('open')) nav.classList.remove('open');
+  });
+});
