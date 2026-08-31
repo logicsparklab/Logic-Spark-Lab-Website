@@ -2,7 +2,12 @@ const menu = document.getElementById('menu');
 const nav = document.getElementById('nav');
 
 if (menu && nav) {
-  menu.onclick = () => nav.classList.toggle('open');
+  menu.onclick = () => {
+    const isOpen = nav.classList.toggle('open');
+    nav.classList.toggle('show', isOpen);
+    menu.setAttribute('aria-expanded', String(isOpen));
+    menu.setAttribute('aria-label', isOpen ? 'Close Menu' : 'Open Menu');
+  };
 }
 
 /* CONTACT FORM */
@@ -213,6 +218,12 @@ document.addEventListener('keydown', (e) => {
 /* CLOSE MOBILE MENU */
 document.querySelectorAll('#nav a').forEach(link => {
   link.addEventListener('click', () => {
-    if (nav && nav.classList.contains('open')) nav.classList.remove('open');
+    if (nav) {
+      nav.classList.remove('open', 'show');
+      if (menu) {
+        menu.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-label', 'Open Menu');
+      }
+    }
   });
 });
